@@ -15,7 +15,7 @@ services:
   #     DATABASE_URL: "postgresql://postgres:password@db:5432/postgres"
   #     JWT_SECRET: "your_jwt_secret"
   #     JWT_EXPIRATION_TIME: "48h"
-  #     EMAIL_TOKEN: "mlsn.54cca0b108937f91d619d0eb62a745dbff86f904d844e70ddcc9430dc1a1c04c"
+  #     
   #     BASE_URL: "http://localhost:3000"
   #   restart: unless-stopped
 
