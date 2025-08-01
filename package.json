@@ -1,27 +1,45 @@
 {
-  "name": "travel_blog",
-  "version": "0.1.0",
-  "private": true,
-  "scripts": {
-    "dev": "next dev --turbopack",
-    "build": "next build",
-    "start": "next start",
-    "lint": "next lint"
-  },
-  "dependencies": {
-    "react": "19.1.0",
-    "react-dom": "19.1.0",
-    "next": "15.4.4"
-  },
-  "devDependencies": {
-    "typescript": "^5",
-    "@types/node": "^20",
-    "@types/react": "^19",
-    "@types/react-dom": "^19",
-    "@tailwindcss/postcss": "^4",
-    "tailwindcss": "^4",
-    "eslint": "^9",
-    "eslint-config-next": "15.4.4",
-    "@eslint/eslintrc": "^3"
-  }
+   "name": "travel_blog",
+   "version": "0.1.0",
+   "private": true,
+   "scripts": {
+      "dev": "next dev --turbopack",
+      "build": "next build",
+      "start": "next start",
+      "lint": "next lint",
+      "db:generate": "drizzle-kit generate",
+      "db:migrate": "drizzle-kit migrate",
+      "db:studio": "drizzle-kit studio",
+      "db:push": "drizzle-kit push --config drizzle.config.ts"
+   },
+   "dependencies": {
+      "@hookform/resolvers": "^5.2.1",
+      "clsx": "^2.1.1",
+      "dotenv": "^17.2.1",
+      "drizzle-orm": "^0.44.4",
+      "lucide-react": "^0.534.0",
+      "next": "15.4.4",
+      "pg": "^8.16.3",
+      "postgres": "^3.4.7",
+      "react": "18",
+      "react-dom": "18",
+      "react-hook-form": "^7.61.1",
+      "tailwind-merge": "^3.3.1",
+      "zod": "^4.0.13"
+   },
+   "devDependencies": {
+      "@eslint/eslintrc": "^3",
+      "@tailwindcss/postcss": "^4",
+      "@types/node": "^20",
+      "@types/pg": "^8.15.5",
+      "@types/react": "^18",
+      "@types/react-dom": "^18",
+      "daisyui": "^5.0.50",
+      "drizzle-kit": "^0.31.4",
+      "eslint": "^9",
+      "eslint-config-next": "15.4.4",
+      "tailwindcss": "^4",
+      "tsx": "^4.20.3",
+      "typescript": "^5"
+   }
 }

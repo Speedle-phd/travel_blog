@@ -1,0 +1,34 @@
+version: "3.8"
+
+services:
+  # nextjs_prod:
+  #   build:
+  #     context: .
+  #     dockerfile: Dockerfile.prod
+  #     # target: production
+  #   ports:
+  #     - "3000:3000"
+  #   depends_on:
+  #     - db
+  #   # command: ["/bin/sleep", "3600"]
+  #   environment:
+  #     DATABASE_URL: "postgresql://postgres:password@db:5432/postgres"
+  #     JWT_SECRET: "your_jwt_secret"
+  #     JWT_EXPIRATION_TIME: "48h"
+  #     EMAIL_TOKEN: "mlsn.54cca0b108937f91d619d0eb62a745dbff86f904d844e70ddcc9430dc1a1c04c"
+  #     BASE_URL: "http://localhost:3000"
+  #   restart: unless-stopped
+
+  db:
+    image: postgres
+    ports:
+      - "5432:5432"
+    container_name: travelblog_drizzle_db
+    environment:
+      POSTGRES_PASSWORD: example
+      PGDATA: /var/lib/postgresql/data
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    restart: always
+volumes:
+  pgdata:
