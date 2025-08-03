@@ -28,7 +28,7 @@ const page = async({ params } : { params: Promise<{ id: string }> }) => {
       <div className="flex flex-col items-center justify-center min-h-screen">
          <Header />
          <Navigation />
-         <div className='card bg-base-100 w-[clamp(17rem,50vw,30rem)] shadow-xl shadow-black overflow-hidden mx-auto relative'>
+         <div className='card bg-base-100 w-[clamp(17rem,70vw,60rem)] shadow-xl shadow-black overflow-hidden mx-auto relative'>
             <Link href='/upcoming' className='absolute top-4 right-4 z-10'>
                <div className='rounded-full bg-base-200 p-2 hover:bg-base-300 transition-colors'>
                   <ArrowLeft />

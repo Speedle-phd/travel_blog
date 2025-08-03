@@ -6,9 +6,9 @@ import { z } from 'zod'
 import Underline from '../Underline'
 import { useRouter } from 'next/navigation'
 
-const fileWhiteList = ['image/jpeg', 'image/png']
+export const fileWhiteList = ['image/jpeg', 'image/png']
 
-const formSchema = z.object({
+export const formSchema = z.object({
    destination: z.string().min(1, 'Destination is required'),
    note: z.string().optional(),
    imageUrl: z

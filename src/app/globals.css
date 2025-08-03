@@ -26,6 +26,11 @@
       background-size: cover;
       background-position: center;
    }
+   .auto-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+   }
    
    @media (width > 500px) {
       .bg-image {
