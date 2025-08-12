@@ -44,7 +44,7 @@ const AddTrip = () => {
    const onSubmit = async(data: z.infer<typeof formSchema>) => {
       const { destination, note, imageUrl, priority } = data
       const { type } = imageUrl[0] || {}
-      if (imageUrl && !fileWhiteList.includes(type)) {
+      if (imageUrl && imageUrl.length > 0 && !fileWhiteList.includes(type)) {
          setError('imageUrl', {
             type: 'manual',
             message: `Only ${fileWhiteList.join(', ')} files are allowed.`,

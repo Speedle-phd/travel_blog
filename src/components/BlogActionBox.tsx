@@ -8,6 +8,7 @@ import Image from 'next/image'
 import { DestinationTable } from '@/drizzle/schema'
 import { useRouter } from 'next/navigation'
 
+
 // If you want a schema with only the imageUrl field from formSchema:
 const formImageSchema = formSchema.pick({ imageUrl: true })
 type Props = {
@@ -62,6 +63,31 @@ const BlogActionBox = ({ trip }: Props) => {
          setImages(Array.from(files))
       }
    }
+
+   const handleEndTrip = async () => {
+      try {
+         const response = await fetch(`/api/v1/trip`, {
+            method: 'PUT',
+            headers: {
+               'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+               id: trip?.id,
+               currentTrip: false,
+               upcomingTrip: false,
+               finishedTrip: true,
+            }),
+         })
+         if (!response.ok) {
+            throw new Error('Failed to end trip')
+         }
+         // Optionally, you can update the trip state or refetch data here
+         router.push('/journal')
+      } catch (error) {
+         console.error('Error ending trip:', error)
+      }
+   }
+
    return (
       <>
          {modalOpen && (
@@ -146,11 +172,11 @@ const BlogActionBox = ({ trip }: Props) => {
             </div>
          )}
          <div className='flex gap-2 items-center my-4'>
-            <button className='btn' onClick={() => setModalOpen(true)}>
+            <button className='btn btn-sm sm:btn-md' onClick={() => setModalOpen(true)}>
                Add photos
             </button>
-            <button className='btn'>Edit</button>
-            <button className='btn'>End Trip</button>
+            <button className='btn btn-sm sm:btn-md'>Edit</button>
+            <button onClick={handleEndTrip} className='btn btn-sm sm:btn-md'>End Trip</button>
          </div>
       </>
    )

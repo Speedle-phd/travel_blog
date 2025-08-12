@@ -1,6 +1,6 @@
 import { db } from '@/drizzle/db'
 import { DestinationTable } from '@/drizzle/schema'
-import { writeFile } from 'fs/promises'
+import { unlink, writeFile } from 'fs/promises'
 import { revalidatePath } from 'next/cache'
 import path from 'path'
 import { eq } from 'drizzle-orm'
@@ -30,7 +30,7 @@ export async function POST(request: Request) {
       const databaseEntry = {
          destinationName: destination,
          note,
-         imageUrl: fileName ? [fileName] : null,
+         imageUrl: fileName ? [fileName] : ['default-trip-image.jpg'],
          priority: priority || 'LOW',
       } as {
          destinationName: string
@@ -91,6 +91,16 @@ export async function DELETE(request: Request) {
             headers: { 'Content-Type': 'application/json' },
          })
       }
+
+      deletedTrip.forEach(async (trip) => {
+         if (trip.imageUrl) {
+            trip.imageUrl.forEach(async(image) => {
+               const imagePath = process.cwd() + '/public/' + image
+               await unlink(imagePath)
+            })
+         }
+      })
+
       revalidatePath('/upcoming') // Revalidate the upcoming trips page
       return new Response(
          JSON.stringify({ message: 'Trip deleted successfully' }),
@@ -157,6 +167,12 @@ export async function PUT(request: Request) {
       if (body.finishedTrip !== undefined) {
          
          updateData = {...updateData, finishedTrip: body.finishedTrip }
+      }
+      if (body.favorite !== undefined) {
+         updateData = {...updateData, favorite: body.favorite }
+      }
+      if (body.startingDate) {
+         updateData = {...updateData, startingDate: new Date(body.startingDate) }
       }
 
       if (Object.keys(updateData).length === 0) {

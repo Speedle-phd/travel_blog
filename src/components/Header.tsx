@@ -1,4 +1,5 @@
 import { Heart, Map } from 'lucide-react'
+import Link from 'next/link'
 import React from 'react'
 
 const Header = () => {
@@ -8,7 +9,9 @@ const Header = () => {
             Nadine&apos;s and Emanuel&apos;s Travel Blog
          </div>
          <Map className='ml-4 text-gray-500 w-4 md:w-8' />
-         <Heart className='ml-2 text-gray-500 w-4 md:w-8' />
+         <Link href="/journal?favorites=true">
+            <Heart className='ml-2 text-gray-500 w-4 md:w-8' />
+         </Link>
       </div>
    )
 }

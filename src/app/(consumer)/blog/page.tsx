@@ -1,9 +1,10 @@
-
 import BlogActionBox from '@/components/BlogActionBox'
+import Gallery from '@/components/Gallery'
 import Underline from '@/components/Underline'
 import { db } from '@/drizzle/db'
 import { DestinationTable } from '@/drizzle/schema'
 import Image from 'next/image'
+import Link from 'next/link'
 import React from 'react'
 
 const Blog = async() => {
@@ -18,14 +19,24 @@ const Blog = async() => {
 
 
    if (!currentTrip) {
-      return <div className='text-center'>No current trip found.</div>
+      return (
+      <div className='tabs-box backdrop-filter backdrop-blur-sm bg-base-100/60 rounded-sm! p-4 flex flex-col items-center justify-center gap-4'>
+         <div className='text-center'>No current trip found.</div>
+         <button className="btn">
+            <Link href='/upcoming' className='bg-base-100 hover:opacity-80 text-base-content'>
+               Head to your upcoming trips
+            </Link>
+         </button>
+      </div>
+      )
    }
 
-   const { destinationName, note, imageUrl, priority } = currentTrip
+   const { destinationName, note, imageUrl, startingDate } = currentTrip
    const galleryImages = imageUrl?.slice(1) || []
 
    return (
       <div className='tabs-box backdrop-filter backdrop-blur-sm bg-base-100/60 rounded-sm! p-4'>
+         
          <header className='flex gap-4'>
             <div className='avatar'>
                <div className='w-28 sm:w-48 mask mask-squircle'>
@@ -40,6 +51,7 @@ const Blog = async() => {
             </div>
             <div>
                <h2 className="sm:text-4xl">{destinationName}</h2>
+               <p className="text-xs">{startingDate?.toLocaleDateString("de-DE", { month: 'long', year: 'numeric' })}</p>
                <p className='ml-4 font-indie my-6 text-lg'>
                   {note || 'No notes provided for this trip.'}
                </p>
@@ -48,22 +60,11 @@ const Blog = async() => {
          <BlogActionBox trip={currentTrip} />
          <Underline className="w-full my-8"/>
          <h3 className="text-5xl font-bold font-indie mb-4">Gallery</h3>
-         <div className='gallery grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4'>
-            {galleryImages.length > 0 ? (
-               galleryImages.map((image, index) => (
-                  <div key={index} className='w-full h-48 relative'>
-                     <Image
-                        src={`/${image}`}
-                        alt={`${destinationName} Gallery Image ${index + 1}`}
-                        fill
-                        className='object-cover object-center rounded-lg'
-                     />
-                  </div>
-               ))
-            ) : (
-               <p>No gallery images available.</p>
-            )}
-         </div>
+         <Gallery
+            galleryImages={galleryImages}
+            currentTrip={currentTrip}
+            destinationName={destinationName!}
+         />
       </div>
    )
 }

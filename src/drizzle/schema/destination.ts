@@ -1,5 +1,6 @@
-import { boolean, pgEnum, pgTable, text } from 'drizzle-orm/pg-core'
+import { boolean, pgEnum, pgTable, text, timestamp } from 'drizzle-orm/pg-core'
 import { createdAt, id, updatedAt } from '../schemaHelpers'
+
 // import { relations } from 'drizzle-orm'
 
 export const priorities = ['LOW', 'MEDIUM', 'HIGH'] as const
@@ -11,6 +12,8 @@ export const DestinationTable = pgTable('destination', {
    createdAt,
    updatedAt,
    destinationName: text().notNull(),
+   startingDate: timestamp({ withTimezone: true }),
+   favorite: boolean().default(false),
    note: text(),
    imageUrl: text().array(),
    currentTrip: boolean().default(false),

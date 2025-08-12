@@ -1,7 +1,7 @@
 import { db } from '@/drizzle/db'
 import { DestinationTable } from '@/drizzle/schema'
-import { eq } from 'drizzle-orm'
-import { writeFile } from 'fs/promises'
+import { eq, sql } from 'drizzle-orm'
+import { unlink, writeFile } from 'fs/promises'
 export async function PUT(request: Request) {
    const body = await request.formData()
    console.log(body)
@@ -70,6 +70,75 @@ export async function PUT(request: Request) {
       console.error('Error uploading images:', error)
       return new Response(
          JSON.stringify({ error: 'Failed to upload images' }),
+         {
+            status: 500,
+            headers: { 'Content-Type': 'application/json' },
+         }
+      )
+   }
+}
+
+export async function DELETE(request: Request) {
+   const body = await request.json()
+   const { tripId, imageName } = body
+   if (!imageName) {
+      return new Response(
+         JSON.stringify({ error: 'Image name is required' }),
+         {
+            status: 400,
+            headers: { 'Content-Type': 'application/json' },
+         }
+      )
+   }
+   try {
+      // Logic to delete the image from the database and filesystem
+      // First, fetch the current imageUrl array
+      // const current = await db.select().from(DestinationTable).where(
+      //    eq(DestinationTable.id, tripId)
+      // )
+      // const currentImages = current[0]?.imageUrl || []
+      // const updatedImages = currentImages.filter((img: string) => img !== imageName)
+      // const response = await db.update(DestinationTable).set({
+      //    imageUrl: updatedImages
+      // }).where(
+      //    eq(DestinationTable.id, tripId)
+      // ).returning()
+
+      const response = await db
+         .update(DestinationTable)
+         .set({
+            imageUrl: sql`array_remove(${DestinationTable.imageUrl}, ${imageName})`,
+         })
+         .where(eq(DestinationTable.id, tripId))
+         .returning()
+
+      if (response.length === 0) {
+         return new Response(
+            JSON.stringify({ error: 'Failed to delete image' }),
+            {
+               status: 500,
+               headers: { 'Content-Type': 'application/json' },
+            }
+         )
+      }
+
+      // Optionally, delete the file from the filesystem
+      const filePath = process.cwd() + '/public/' + imageName
+      await unlink(filePath)
+
+      console.log(`File deleted: ${filePath}`)
+
+      return new Response(
+         JSON.stringify({ message: 'Image deleted successfully' }),
+         {
+            status: 200,
+            headers: { 'Content-Type': 'application/json' },
+         }
+      )
+   } catch (error) {
+      console.error('Error deleting image:', error)
+      return new Response(
+         JSON.stringify({ error: 'Failed to delete image' }),
          {
             status: 500,
             headers: { 'Content-Type': 'application/json' },

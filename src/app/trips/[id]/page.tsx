@@ -8,6 +8,8 @@ import TripActionBox from '@/components/TripActionBox'
 import { ArrowLeft } from 'lucide-react'
 import Header from '@/components/Header'
 import Navigation from '@/components/Navigation'
+import { isNotNull } from 'drizzle-orm'
+
 const page = async({ params } : { params: Promise<{ id: string }> }) => {
    const { id } = await params
    let trip : typeof DestinationTable.$inferSelect | null = null
@@ -22,24 +24,24 @@ const page = async({ params } : { params: Promise<{ id: string }> }) => {
       console.error('Error fetching trip details:', error)
    }
    const { destinationName, note, imageUrl, priority } = trip ?? {}
-
-
+   
    return (
       <div className="flex flex-col items-center justify-center min-h-screen">
          <Header />
          <Navigation />
-         <div className='card bg-base-100 w-[clamp(17rem,70vw,60rem)] shadow-xl shadow-black overflow-hidden mx-auto relative'>
+         <div className='card bg-base-100 w-[clamp(17rem,70vw,40rem)] shadow-xl shadow-black  mx-auto relative'>
             <Link href='/upcoming' className='absolute top-4 right-4 z-10'>
                <div className='rounded-full bg-base-200 p-2 hover:bg-base-300 transition-colors'>
                   <ArrowLeft />
                </div>
             </Link>
             <Image
-               src={`/${imageUrl?.[0] || 'default-trip-image.jpg'}`}
+
+               src={imageUrl?.[0] ? `/${imageUrl[0]}` : '/default-trip-image.jpg'}
                alt={destinationName!}
                width={400}
                height={400}
-               className='object-cover object-center w-full '
+               className='object-cover object-center w-full rounded-t-2xl'
             />
             <div className='card-body'>
                <h2 className='card-title'>{destinationName!}</h2>
@@ -57,7 +59,7 @@ const page = async({ params } : { params: Promise<{ id: string }> }) => {
                >
                   {priority}
                </div>
-               <TripActionBox id={id} />
+               <TripActionBox id={id} trip={trip} />
             </div>
          </div>
       </div>
