@@ -124,7 +124,9 @@ export async function DELETE(request: Request) {
 
       // Optionally, delete the file from the filesystem
       const filePath = process.cwd() + '/public/' + imageName
-      await unlink(filePath)
+      if (filePath && imageName !== 'default-trip-image.jpg') {
+         await unlink(filePath)
+      }
 
       console.log(`File deleted: ${filePath}`)
 

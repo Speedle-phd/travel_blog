@@ -96,7 +96,9 @@ export async function DELETE(request: Request) {
          if (trip.imageUrl) {
             trip.imageUrl.forEach(async(image) => {
                const imagePath = process.cwd() + '/public/' + image
-               await unlink(imagePath)
+               if (image && image !== 'default-trip-image.jpg') {
+                  await unlink(imagePath)
+               }
             })
          }
       })

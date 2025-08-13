@@ -7,6 +7,7 @@ import { useForm } from 'react-hook-form'
 import Image from 'next/image'
 import { DestinationTable } from '@/drizzle/schema'
 import { useRouter } from 'next/navigation'
+import Link from 'next/link'
 
 
 // If you want a schema with only the imageUrl field from formSchema:
@@ -175,7 +176,7 @@ const BlogActionBox = ({ trip }: Props) => {
             <button className='btn btn-sm sm:btn-md' onClick={() => setModalOpen(true)}>
                Add photos
             </button>
-            <button className='btn btn-sm sm:btn-md'>Edit</button>
+            <Link href={`/trips/${trip?.id}`}><button className='btn btn-sm sm:btn-md'>Edit</button></Link>
             <button onClick={handleEndTrip} className='btn btn-sm sm:btn-md'>End Trip</button>
          </div>
       </>

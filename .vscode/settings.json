@@ -1,0 +1,27 @@
+{
+   "sqltools.connections": [
+      {
+         "mysqlOptions": {
+            "authProtocol": "default",
+            "enableSsl": "Disabled"
+         },
+         "previewLimit": 50,
+         "server": "localhost",
+         "port": 3306,
+         "driver": "MySQL",
+         "name": "mysql",
+         "database": "onos_db",
+         "username": "shanks",
+         "askForPassword": true
+      },
+      {
+         "previewLimit": 50,
+         "server": "nadine.speedle.dev",
+         "port": 5435,
+         "driver": "PostgreSQL",
+         "name": "test",
+         "database": "postgres",
+         "username": "postgres"
+      }
+   ]
+}

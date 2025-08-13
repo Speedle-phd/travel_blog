@@ -8,7 +8,7 @@ import TripActionBox from '@/components/TripActionBox'
 import { ArrowLeft } from 'lucide-react'
 import Header from '@/components/Header'
 import Navigation from '@/components/Navigation'
-import { isNotNull } from 'drizzle-orm'
+
 
 const page = async({ params } : { params: Promise<{ id: string }> }) => {
    const { id } = await params
