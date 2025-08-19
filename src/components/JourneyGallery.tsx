@@ -40,7 +40,7 @@ const JourneyGallery = ({ completedTrips }: Props) => {
                   }) ?? 'No Date provided'}
                </p>
                <Image
-                  src={`/${trip.imageUrl?.[0] || 'default-trip-image.jpg'}`}
+                  src={`https://static.speedle.dev/${trip.imageUrl?.[0] || 'default-trip-image.jpg'}`}
                   alt={trip.destinationName!}
                   width={400}
                   height={400}

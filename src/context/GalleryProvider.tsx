@@ -60,7 +60,7 @@ export const GalleryProvider: React.FC<GalleryProviderProps> = ({ children }) =>
                         className='carousel-item w-full'
                      >
                         <Image
-                           src={`/${img}`}
+                           src={`https://static.speedle.dev/${img}`}
                            alt={`Gallery ${idx}`}
                            width={1600}
                            height={1000}

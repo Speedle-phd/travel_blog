@@ -1,7 +1,7 @@
-version: "3.8"
+# version: "3.8"
 
 services:
-  nextjs_prod:
+  nadine_nextjs_prod:
     build:
       context: .
       dockerfile: Dockerfile.prod
@@ -11,18 +11,27 @@ services:
     depends_on:
       - db
     # command: ["/bin/sleep", "3600"]
+    environment:
+      - DATABASE_URL=postgresql://postgres:example@db:5432/postgres
     restart: unless-stopped
+    volumes:
+      # make a volume for public folder to sync
+      - ./public:/app/public
 
   db:
     image: postgres
     ports:
-      - "5433:5432"
-    container_name: travelblog_drizzle_db
+      - "5435:5432"
+    expose:
+      - "5435"
+    container_name: nadine_db
     environment:
       POSTGRES_PASSWORD: example
+      PGPORT: 5432
       PGDATA: /var/lib/postgresql/data
     volumes:
       - pgdata:/var/lib/postgresql/data
     restart: always
 volumes:
   pgdata:
+  

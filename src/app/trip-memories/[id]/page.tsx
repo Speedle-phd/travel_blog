@@ -40,7 +40,7 @@ const page = async ({ params }: { params: Promise<{ id: string }> }) => {
             <header className='flex gap-2'>
                <div className='w-28 sm:w-48 mask mask-squircle'>
                   <Image
-                     src={`/${imageUrl?.[0] || 'default-trip-image.jpg'}`}
+                     src={imageUrl?.[0] ? `https://static.speedle.dev/${imageUrl?.[0]}` : 'https://static.speedle.dev/default-trip-image.jpg'}
                      alt={destinationName!}
                      width={400}
                      height={400}

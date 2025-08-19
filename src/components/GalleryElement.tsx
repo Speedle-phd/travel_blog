@@ -37,7 +37,7 @@ const GalleryElement = ({ image, destinationName, index, id, images }: Props) =>
          <div key={index} className='w-full h-48 relative cursor-zoom-in'>
             <a href={`#item${index}`}>
                <Image
-                  src={`/${image}`}
+                  src={`https://static.speedle.dev/${image || 'default-trip-image.jpg'}`}
                   alt={`${destinationName} Gallery Image ${index + 1}`}
                   fill
                   className='object-cover object-center rounded-lg'

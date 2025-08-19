@@ -1,5 +1,7 @@
 'use client'
 import { DestinationTable } from '@/drizzle/schema'
+// import { imageLoader } from '@/lib/imageLoader'
+
 import { Edit } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
@@ -9,18 +11,25 @@ type Props = {
    trip: typeof DestinationTable.$inferSelect
    className?: string
 }
+
+
+
 const TripTile = ({ trip, className }: Props) => {
    const image = trip.imageUrl?.[0] ?? 'default-trip-image.jpg' // Fallback image if none provided
    return (
       <div className={`card sm:card-side shadow-lg opacity-100 bg-base-100 hover:bg-base-200 transition-all duration-300 ease-in-out p-4 mb-4 ${className}`}>
          <div className='aspect-square relative sm:w-36'>
             <Image
-               src={`/${image}`}
+               // loader={imageLoader}
+               src={`https://static.speedle.dev/${image || 'default-trip-image.jpg'}`}
                alt={trip.destinationName}
                fill
                className='object-cover object-center rounded'
-               
+               sizes='(max-width: 640px) 100vw, (min-width: 641px) 200px'
+               priority
+               unoptimized={true} // Use this if you have issues with image optimization in Docker
             />
+
          </div>
          <div className='ml-2 flex gap-4 sm:gap-0 flex-col sm:flex-row justify-between w-full'>
             <div className='flex flex-col justify-between'>

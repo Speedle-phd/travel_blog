@@ -37,7 +37,7 @@ const page = async({ params } : { params: Promise<{ id: string }> }) => {
             </Link>
             <Image
 
-               src={imageUrl?.[0] ? `/${imageUrl[0]}` : '/default-trip-image.jpg'}
+               src={imageUrl?.[0] ? `https://static.speedle.dev/${imageUrl[0]}` : 'https://static.speedle.dev/default-trip-image.jpg'}
                alt={destinationName!}
                width={400}
                height={400}
