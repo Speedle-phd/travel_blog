@@ -1,4 +1,5 @@
 "use client"
+import { getCookie } from 'cookies-next'
 import { useRouter } from 'next/navigation'
 import React from 'react'
 
@@ -7,9 +8,12 @@ type Props = {
    isFavorite: boolean | undefined | null
 }
 const FavButton = ({id, isFavorite} : Props) => {
+   const authRole = getCookie('authRole')
+
    const router = useRouter()
    const [loading, setLoading] = React.useState(false)
    const handleClick = async() => {
+      if (authRole === "guest") return
       setLoading(true)
       try {
          const response = await fetch('/api/v1/trip', {

@@ -1,7 +1,7 @@
 import { db } from '@/drizzle/db'
 import { DestinationTable } from '@/drizzle/schema'
 import Link from 'next/link'
-import React from 'react'
+import React, { Suspense } from 'react'
 import Image from 'next/image'
 
 import { ArrowLeft } from 'lucide-react'
@@ -10,6 +10,7 @@ import Navigation from '@/components/Navigation'
 import Underline from '@/components/Underline'
 import Gallery from '@/components/Gallery'
 import FavButton from '@/components/FavButton'
+import GalleryLoader from '@/components/GalleryLoader'
 const page = async ({ params }: { params: Promise<{ id: string }> }) => {
    const { id } = await params
    let trip: typeof DestinationTable.$inferSelect | null = null
@@ -28,7 +29,7 @@ const page = async ({ params }: { params: Promise<{ id: string }> }) => {
    const { destinationName, imageUrl, startingDate, favorite } = trip ?? {}
 
    return (
-      <div className='flex flex-col items-center justify-center min-h-screen'>
+      <div className='flex flex-col items-center justify-center min-h-screen my-10'>
          <Header />
          <Navigation />
          <div className='card bg-base-100 w-[clamp(17rem,70vw,40rem)] shadow-xl shadow-black overflow-hidden mx-auto relative my-10 p-4 flex flex-col gap-2'>
@@ -38,13 +39,18 @@ const page = async ({ params }: { params: Promise<{ id: string }> }) => {
                </div>
             </Link>
             <header className='flex gap-2'>
-               <div className='w-28 sm:w-48 mask mask-squircle'>
+               <div className='relative w-28 h-28 sm:w-48 sm:h-48 rounded-lg overflow-hidden flex items-center justify-center bg-base-200 mask mask-squircle'>
                   <Image
-                     src={imageUrl?.[0] ? `https://static.speedle.dev/${imageUrl?.[0]}` : 'https://static.speedle.dev/default-trip-image.jpg'}
+                     src={
+                        imageUrl?.[0]
+                           ? `${process.env.NEXT_PUBLIC_STATIC}${imageUrl?.[0]}`
+                           : `${process.env.NEXT_PUBLIC_STATIC}default-trip-image.jpg`
+                     }
                      alt={destinationName!}
-                     width={400}
-                     height={400}
-                     className='object-cover object-center'
+                     fill
+                     sizes="192px"
+                     className='object-cover'
+                     priority
                   />
                </div>
                <div>
@@ -63,11 +69,13 @@ const page = async ({ params }: { params: Promise<{ id: string }> }) => {
             <Underline className='w-full mb-4' />
             <div>
                <h3 className='font-indie text-4xl mb-4'>Gallery</h3>
-               <Gallery
-                  galleryImages={imageUrl?.slice(1) ?? []}
-                  currentTrip={trip!}
-                  destinationName={destinationName!}
-               />
+               <Suspense fallback={<GalleryLoader amount={imageUrl!.length - 1} />}>
+                  <Gallery
+                     galleryImages={imageUrl?.slice(1) ?? []}
+                     currentTrip={trip!}
+                     destinationName={destinationName!}
+                  />
+               </Suspense>
             </div>
          </div>
       </div>

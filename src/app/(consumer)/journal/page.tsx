@@ -7,7 +7,9 @@ import React from 'react'
 
 import JourneyGallery from '@/components/JourneyGallery'
 import FilterFavButton from '@/components/FilterFavButton'
+
 const page = async () => {
+   
    let completedTrips: (typeof DestinationTable.$inferSelect)[] = []
    try {
       // Fetch completed trips

@@ -5,7 +5,7 @@ import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import Underline from '../Underline'
 import { useRouter } from 'next/navigation'
-
+import {getCookie} from 'cookies-next'
 export const fileWhiteList = ['image/jpeg', 'image/png']
 
 export const formSchema = z.object({
@@ -23,6 +23,8 @@ export const formSchema = z.object({
 })
 
 const AddTrip = () => {
+   const authRole = getCookie('authRole')
+   console.log(authRole)
    const router = useRouter()
    const form = useForm<z.infer<typeof formSchema>>({
       resolver: zodResolver(formSchema),
@@ -84,6 +86,7 @@ const AddTrip = () => {
    }
 
    return (
+      
       <div>
          <h2 className='text-xl font-semibold'>Add a New Trip</h2>
          <Underline className='mx-0' />
@@ -160,7 +163,7 @@ const AddTrip = () => {
                   </span>
                )}
             </fieldset>
-            <button disabled={isSubmitting} className='btn' type='submit'>
+            <button disabled={isSubmitting || authRole === "guest"} className='btn' type='submit'>
                {isSubmitting ? (
                   <span className='loading loading-ring loading-lg'></span>
                ) : (

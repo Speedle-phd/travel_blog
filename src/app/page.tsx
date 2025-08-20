@@ -1,10 +1,11 @@
 
 
+import AuthButton from "@/components/AuthButton";
 import Underline from "@/components/Underline";
-import Link from "next/link";
+
 
 export default function Home() {
-
+   const PASSWORD = process.env.NEXT_PUBLIC_PASSWORD!
 
    return (
       <div
@@ -20,9 +21,8 @@ export default function Home() {
                </p>
             </header>
             <Underline className="" />
-            <Link href='/blog'>
-               <button className="mt-4 px-4 py-2 bg-petrol  rounded-md btn border-gray-800 text-gray-200 hover:bg-white hover:border-petrol transition-colors hover:text-petrol">Head to the Blog</button>
-            </Link>
+            <AuthButton password={PASSWORD} />
+
          </div>
       </div>
    )

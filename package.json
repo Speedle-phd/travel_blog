@@ -16,6 +16,7 @@
       "@hookform/resolvers": "^5.2.1",
       "cally": "^0.8.0",
       "clsx": "^2.1.1",
+      "cookies-next": "^6.1.0",
       "dotenv": "^17.2.1",
       "drizzle-orm": "^0.44.4",
       "lucide-react": "^0.534.0",

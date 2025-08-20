@@ -5,6 +5,7 @@ import { ThemeProvider } from '../context/ThemeProvider'
 import SwapTheme from '@/components/SwapTheme'
 import { GalleryProvider } from '@/context/GalleryProvider'
 
+
 export const metadata: Metadata = {
    title: 'Travel Blog of Nadine and Emanuel',
    description: 'A blog about our travels',
@@ -20,7 +21,7 @@ export default function RootLayout({
          <html lang='en' data-theme='nord'>
             <body className='min-h-[100dvh]'>
                <GalleryProvider>
-                  {children}
+                     {children}
                   <SwapTheme />
                </GalleryProvider>
             </body>

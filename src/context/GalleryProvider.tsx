@@ -1,43 +1,48 @@
-"use client";
-import { cn } from '@/lib/utils';
-import Image from 'next/image';
-import React, { createContext, useContext, useState, ReactNode } from 'react';
+'use client'
+import { cn } from '@/lib/utils'
+import Image from 'next/image'
+import React, { createContext, useContext, useState, ReactNode } from 'react'
 
 type GalleryContextType = {
-   isOpen: boolean;
-   images: string[];
-   openGallery: (images: string[]) => void;
-   closeGallery: () => void;
-};
+   isOpen: boolean
+   images: string[]
+   openGallery: (images: string[], currentIndex: number) => void
+   closeGallery: () => void
 
-const GalleryContext = createContext<GalleryContextType | undefined>(undefined);
+}
+
+const GalleryContext = createContext<GalleryContextType | undefined>(undefined)
 
 export const useGallery = () => {
-   const context = useContext(GalleryContext);
+   const context = useContext(GalleryContext)
    if (!context) {
-      throw new Error('useGallery must be used within a GalleryProvider');
+      throw new Error('useGallery must be used within a GalleryProvider')
    }
-   return context;
-};
+   return context
+}
 
 type GalleryProviderProps = {
-   children: ReactNode;
-};
+   children: ReactNode
+}
 
-export const GalleryProvider: React.FC<GalleryProviderProps> = ({ children }) => {
-   const [isOpen, setIsOpen] = useState(false);
-   const [images, setImages] = useState<string[]>([]);
-   
+export const GalleryProvider: React.FC<GalleryProviderProps> = ({
+   children,
+}) => {
+   const [isOpen, setIsOpen] = useState(false)
+   const [images, setImages] = useState<string[]>([])
+   const [index, setIndex] = useState(0)
 
-   const openGallery = (imgs: string[]) => {
-      setImages(imgs);
-      setIsOpen(true);
-   };
+   const openGallery = (imgs: string[], currentIndex: number) => {
+      setIndex(currentIndex)
+      setImages(imgs)
+      setIsOpen(true)
+   }
 
    const closeGallery = () => {
-      setIsOpen(false);
-      setImages([]);
-   };
+      setIsOpen(false)
+      setImages([])
+      setIndex(0)
+   }
 
    return (
       <GalleryContext.Provider
@@ -60,19 +65,21 @@ export const GalleryProvider: React.FC<GalleryProviderProps> = ({ children }) =>
                         className='carousel-item w-full'
                      >
                         <Image
-                           src={`https://static.speedle.dev/${img}`}
+                           src={`${process.env.NEXT_PUBLIC_STATIC}${img}`}
                            alt={`Gallery ${idx}`}
                            width={1600}
-                           height={1000}
+                           height={1600}
                            className={cn(
-                              `object-cover object-center rounded-lg mx-auto`
+                              `object-contain max-h-[calc(100dvh-10rem)] rounded-lg mx-auto`
                            )}
                         />
                      </div>
                   ))}
                </div>
-               <div className='flex w-full justify-center gap-2 py-2'>
-                  {images.map((_, idx) => (
+               <div className='flex flex-wrap w-full justify-center gap-2 py-2'>
+                  {images.map((_, idx) => {
+                     console.log(idx, index)
+                     return (
                      <a
                         key={idx}
                         href={`#item${idx}`}
@@ -80,10 +87,10 @@ export const GalleryProvider: React.FC<GalleryProviderProps> = ({ children }) =>
                      >
                         {idx + 1}
                      </a>
-                  ))}
+                  )})}
                </div>
             </div>
          )}
       </GalleryContext.Provider>
    )
-};
+}

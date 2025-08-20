@@ -1,4 +1,4 @@
-"use client"
+'use client'
 import { DestinationTable } from '@/drizzle/schema'
 import Link from 'next/link'
 import React from 'react'
@@ -40,11 +40,13 @@ const JourneyGallery = ({ completedTrips }: Props) => {
                   }) ?? 'No Date provided'}
                </p>
                <Image
-                  src={`https://static.speedle.dev/${trip.imageUrl?.[0] || 'default-trip-image.jpg'}`}
+                  src={`${process.env.NEXT_PUBLIC_STATIC}${
+                     trip.imageUrl?.[0] || 'default-trip-image.jpg'
+                  }`}
                   alt={trip.destinationName!}
                   width={400}
                   height={400}
-                  className='object-cover object-center mx-auto'
+                  className='h-[150px] object-cover object-center mx-auto'
                />
                {trip.favorite && <Heart className='absolute top-4 right-4' />}
             </Link>

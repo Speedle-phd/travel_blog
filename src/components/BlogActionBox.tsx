@@ -8,6 +8,7 @@ import Image from 'next/image'
 import { DestinationTable } from '@/drizzle/schema'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
+import { getCookie } from 'cookies-next'
 
 
 // If you want a schema with only the imageUrl field from formSchema:
@@ -16,8 +17,20 @@ type Props = {
    trip: typeof DestinationTable.$inferSelect | null
 }
 const BlogActionBox = ({ trip }: Props) => {
+   const authRole = getCookie('authRole')
    const router = useRouter()
    const [modalOpen, setModalOpen] = React.useState(false)
+
+   const closeModal = () => {
+      document.body.classList.remove("overflow-y-hidden")
+      setModalOpen(false)
+   }
+   const openModal = () => {
+      if (authRole === "guest") return
+      document.body.classList.add("overflow-y-hidden")
+      setModalOpen(true)
+   }
+
    const [images, setImages] = React.useState<File[]>([])
    const form = useForm<z.infer<typeof formImageSchema>>({
       resolver: zodResolver(formImageSchema),
@@ -51,7 +64,7 @@ const BlogActionBox = ({ trip }: Props) => {
             throw new Error('Failed to upload images')
          }
          // Optionally, you can update the trip state or refetch data here
-         setModalOpen(false)
+         closeModal()
          setImages([])
          router.refresh()
       } catch (error) {
@@ -66,6 +79,7 @@ const BlogActionBox = ({ trip }: Props) => {
    }
 
    const handleEndTrip = async () => {
+      if (authRole === "guest") return
       try {
          const response = await fetch(`/api/v1/trip`, {
             method: 'PUT',
@@ -92,7 +106,7 @@ const BlogActionBox = ({ trip }: Props) => {
    return (
       <>
          {modalOpen && (
-            <div className='mt-20 absolute w-screen h-screen -translate-y-1/2 -translate-x-1/2 top-1/2 left-1/2 bg-base-100/90 flex items-center justify-center z-[500]'>
+            <div className='fixed w-screen h-screen left-1/2 top-0 -translate-y-1/3 -translate-x-1/2 bg-base-100/90 flex items-center justify-center z-[500]'>
                <div className='p-4 bg-base-100/100 rounded-lg shadow-xl border-2 w-[clamp(15rem,70vw,60rem)] '>
                   <h3 className='text-lg font-bold'>
                      Add photos to your gallery
@@ -155,7 +169,8 @@ const BlogActionBox = ({ trip }: Props) => {
                            <button
                               className='btn'
                               onClick={() => {
-                                 setModalOpen(false)
+
+                                 closeModal()
                                  setImages([])
                               }}
                               disabled={isSubmitting}
@@ -173,10 +188,14 @@ const BlogActionBox = ({ trip }: Props) => {
             </div>
          )}
          <div className='flex gap-2 items-center my-4'>
-            <button className='btn btn-sm sm:btn-md' onClick={() => setModalOpen(true)}>
+            <button className='btn btn-sm sm:btn-md' onClick={openModal}>
                Add photos
             </button>
-            <Link href={`/trips/${trip?.id}`}><button className='btn btn-sm sm:btn-md'>Edit</button></Link>
+            {authRole === 'admin' && (
+               <Link href={`/trips/${trip?.id}`}>
+                  <button className='btn btn-sm sm:btn-md'>Edit</button>
+               </Link>
+            )}
             <button onClick={handleEndTrip} className='btn btn-sm sm:btn-md'>End Trip</button>
          </div>
       </>

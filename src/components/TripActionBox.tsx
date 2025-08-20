@@ -6,12 +6,14 @@ import { useForm } from 'react-hook-form'
 import { fileWhiteList, formSchema } from './tabcontent/AddTrip'
 import { z } from 'zod'
 import { DestinationTable } from '@/drizzle/schema'
+import { getCookie } from 'cookies-next'
 type Props = {
    id: string
    trip: typeof DestinationTable.$inferSelect | null
 }
 
 const TripActionBox = ({ id, trip }: Props) => {
+   const authRole = getCookie('authRole')
    const [loading, setLoading] = React.useState(false)
    const [customError, setCustomError] = React.useState<string | null>(null)
    const [showEditModal, setShowEditModal] = React.useState(false)
@@ -81,6 +83,7 @@ const TripActionBox = ({ id, trip }: Props) => {
    }
 
    const handleVisit = async () => {
+      if (authRole === "guest") return
       setLoading(true)
       try {
          const response = await fetch(`/api/v1/trip`, {
@@ -109,6 +112,7 @@ const TripActionBox = ({ id, trip }: Props) => {
       }
    }
    const handleDelete = async () => {
+      if (authRole === "guest") return
       setLoading(true)
 
       try {
@@ -130,6 +134,7 @@ const TripActionBox = ({ id, trip }: Props) => {
       }
    }
    const handleEdit = () => {
+      if (authRole === "guest") return
       setShowEditModal(true)
       // Logic to open the edit modal
       // This could be a state change that triggers a modal component to render

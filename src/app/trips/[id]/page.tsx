@@ -1,4 +1,3 @@
-
 import { db } from '@/drizzle/db'
 import { DestinationTable } from '@/drizzle/schema'
 import Link from 'next/link'
@@ -9,24 +8,25 @@ import { ArrowLeft } from 'lucide-react'
 import Header from '@/components/Header'
 import Navigation from '@/components/Navigation'
 
-
-const page = async({ params } : { params: Promise<{ id: string }> }) => {
+const page = async ({ params }: { params: Promise<{ id: string }> }) => {
    const { id } = await params
-   let trip : typeof DestinationTable.$inferSelect | null = null
+   let trip: typeof DestinationTable.$inferSelect | null = null
    try {
       // Fetch the trip details using the id
-      trip = (await db.query.DestinationTable.findFirst({ where: (fields, { eq }) => eq(fields.id, id) })) ?? null
+      trip =
+         (await db.query.DestinationTable.findFirst({
+            where: (fields, { eq }) => eq(fields.id, id),
+         })) ?? null
       if (!trip) {
          throw new Error('Trip not found')
       }
-
    } catch (error) {
       console.error('Error fetching trip details:', error)
    }
    const { destinationName, note, imageUrl, priority } = trip ?? {}
-   
+
    return (
-      <div className="flex flex-col items-center justify-center min-h-screen">
+      <div className='flex flex-col items-center justify-center min-h-screen'>
          <Header />
          <Navigation />
          <div className='card bg-base-100 w-[clamp(17rem,70vw,40rem)] shadow-xl shadow-black  mx-auto relative'>
@@ -36,12 +36,15 @@ const page = async({ params } : { params: Promise<{ id: string }> }) => {
                </div>
             </Link>
             <Image
-
-               src={imageUrl?.[0] ? `https://static.speedle.dev/${imageUrl[0]}` : 'https://static.speedle.dev/default-trip-image.jpg'}
+               src={
+                  imageUrl?.[0]
+                     ? `${process.env.NEXT_PUBLIC_STATIC}${imageUrl[0]}`
+                     : `${process.env.NEXT_PUBLIC_STATIC}default-trip-image.jpg`
+               }
                alt={destinationName!}
                width={400}
                height={400}
-               className='object-cover object-center w-full rounded-t-2xl'
+               className='object-cover object-center w-full rounded-t-2xl max-h-100'
             />
             <div className='card-body'>
                <h2 className='card-title'>{destinationName!}</h2>
