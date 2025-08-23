@@ -1,6 +1,7 @@
 'use client'
 import { cn } from '@/lib/utils'
 import Image from 'next/image'
+import { usePathname } from 'next/navigation'
 import React, { createContext, useContext, useState, ReactNode } from 'react'
 
 type GalleryContextType = {
@@ -14,6 +15,7 @@ type GalleryContextType = {
 const GalleryContext = createContext<GalleryContextType | undefined>(undefined)
 
 export const useGallery = () => {
+
    const context = useContext(GalleryContext)
    if (!context) {
       throw new Error('useGallery must be used within a GalleryProvider')
@@ -28,6 +30,9 @@ type GalleryProviderProps = {
 export const GalleryProvider: React.FC<GalleryProviderProps> = ({
    children,
 }) => {
+   // get # part from url
+   const path = usePathname()
+   console.log(path)
    const [isOpen, setIsOpen] = useState(false)
    const [images, setImages] = useState<string[]>([])
    const [index, setIndex] = useState(0)
@@ -42,6 +47,12 @@ export const GalleryProvider: React.FC<GalleryProviderProps> = ({
       setIsOpen(false)
       setImages([])
       setIndex(0)
+   }
+   const handleChange = (e: React.MouseEvent<HTMLButtonElement>) => {
+      const target = e.target
+      console.log(target)
+      const newIdx = e.currentTarget?.innerHTML ? parseInt(e.currentTarget?.innerHTML) - 1 : 0
+      setIndex(newIdx)
    }
 
    return (
@@ -81,11 +92,12 @@ export const GalleryProvider: React.FC<GalleryProviderProps> = ({
                      console.log(idx, index)
                      return (
                      <a
+                        
                         key={idx}
                         href={`#item${idx}`}
-                        className='btn btn-xs rounded-sm! bg-base-100 hover:bg-base-300 font-indie text-lg'
+                        className={cn('btn btn-xs rounded-sm! bg-base-100 hover:bg-base-300 font-indie text-lg px-0 w-[1.5rem]', { 'bg-accent text-black': idx === index })}
                      >
-                        {idx + 1}
+                        <button className="w-full h-full" onClick={handleChange}>{idx + 1}</button>
                      </a>
                   )})}
                </div>
