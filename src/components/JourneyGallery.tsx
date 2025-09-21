@@ -18,7 +18,7 @@ const JourneyGallery = ({ completedTrips }: Props) => {
       return true
    }
    return (
-      <div className='auto-grid'>
+      <div className='auto-grid-300'>
          {completedTrips.filter(filterFunction).length === 0 && (
             <div className='text-center text-lg font-semibold'>
                No completed trips found.
@@ -28,7 +28,7 @@ const JourneyGallery = ({ completedTrips }: Props) => {
             <Link
                href={`/trip-memories/${trip.id}`}
                key={trip.id}
-               className='relative shadow-sm p-4 shadow-base-100 overflow-hidden w-[clamp(15rem,40vw,30rem)]'
+               className='relative shadow-sm p-4 shadow-base-100 overflow-hidden w-[300px] mx-auto'
             >
                <h3 className='text-center text-4xl font-semibold font-indie'>
                   {trip.destinationName}
@@ -44,9 +44,9 @@ const JourneyGallery = ({ completedTrips }: Props) => {
                      trip.imageUrl?.[0] || 'default-trip-image.jpg'
                   }`}
                   alt={trip.destinationName!}
-                  width={400}
-                  height={400}
-                  className='h-[150px] object-cover object-center mx-auto'
+                  width={1600}
+                  height={800}
+                  className='object-cover object-center mx-auto max-w-full aspect-video'
                />
                {trip.favorite && <Heart className='absolute top-4 right-4' />}
             </Link>
